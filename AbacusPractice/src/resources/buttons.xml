@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- bookstore.xml -->
+<buttons>
+
+    <pset name="A1">
+        <range>2</range>
+        <range>3</range>
+
+    </pset>
+    <book ISBN="0123456002">
+        <title>More Java For Dummies</title>
+        <author>Tan Ah Teck</author>
+        <category>Programming</category>
+        <year>2008</year>
+        <price>25.99</price>
+    </book>
+    <book ISBN="0123456010">
+        <title>The Complete Guide to Fishing</title>
+        <author>Bill Jones</author>
+        <author>James Cook</author>
+        <author>Mary Turing</author>
+        <category>Fishing</category>
+        <category>Leisure</category>
+        <language>French</language>
+        <year>2000</year>
+        <edition>2</edition>
+        <price>49.99</price>
+    </book>
+</buttons>

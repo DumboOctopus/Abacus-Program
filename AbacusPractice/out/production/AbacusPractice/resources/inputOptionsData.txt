@@ -1,0 +1,22 @@
+//tagging info
+//range is range of problems
+//num is number of problems per problem
+//req is set of required
+//time is set of time
+//final sets up a new final object
+//final: name, lowerRange, upperRange, numberOfNumbersPerQuestion, timeToAnswer, operation, requiredNumber...
+A1{
+    range: [-4, 4, -9, -9]
+    num: [3, 4]
+    time: [0.2, 05, 0.7, 1, 1.5, 2, 3]
+}
+A2{
+    range: [-9, 9] -I
+    req: [4, 3, 2, 1, -1, -2, -3, -4]
+    num: [3, 4, 5]
+    time: [0.2, 05, 0.7, 1, 1.5, 2, 3]
+}
+A3{
+    final: A1, -10, 10, 3, 6, +
+    time: [0.2, 05, 0.7, 1, 1.5, 2, 3]
+}
