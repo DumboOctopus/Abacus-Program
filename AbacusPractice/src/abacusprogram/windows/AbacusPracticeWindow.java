@@ -13,7 +13,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 
 
 /**
@@ -171,6 +173,7 @@ public class AbacusPracticeWindow extends JFrame implements QuizListener {
         item.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 JOptionPane.showMessageDialog(AbacusPracticeWindow.this,"Please email: neilp0101@gmail.com");
             }
         });
@@ -252,10 +255,131 @@ public class AbacusPracticeWindow extends JFrame implements QuizListener {
         item.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(AbacusPracticeWindow.this,"Please email: neilp0101@gmail.com");
+                Desktop desktop = Desktop.getDesktop();
+                String message = "mailto:neilp0101@gmail.com?subject=Bug%20Dectected%20For%20AbacusProgram&body=Please%20Place%20Description%20Here";
+                URI uri = URI.create(message);
+                try {
+                    desktop.mail(uri);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
             }
         });
         menuBar.add(item);
+
+
+        //custom settings
+        submenu = new JMenu("Manual Set");
+
+        item = new JMenuItem("Number Of Problems ");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                settings.setNumberOfQuestions(promptInteger(
+                        "Set Number Of Problems",
+                        "How many problems (Question 1, question 2) should the text have?",
+                        settings.getNumberOfQuestions()
+                ));
+            }
+        });
+        submenu.add(item);
+
+        item = new JMenuItem("Range Of Problems ");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                settings.setLowerRange(promptInteger(
+                        "Set Lower Range",
+                        "What is the Lowest Number Possible?",
+                        settings.getLowerRange()
+                ));
+                settings.setUpperRange(promptInteger(
+                        "Set Upper Range",
+                        "What is the Highest Number Possible?",
+                        settings.getUpperRange()
+                ));
+            }
+        });
+        submenu.add(item);
+
+        item = new JMenuItem("Set Number Of Numbers Per Question");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                settings.setNumberOfNumbersPerQuestions(promptInteger(
+                        "Set Number Of Numbers per Question",
+                        "In each question, a series of numbers pop up. How many of these numbers should pop up?",
+                        settings.getNumberOfNumbersPerQuestions()
+                ));
+            }
+        });
+        submenu.add(item);
+
+        item = new JMenuItem("Time per Question");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                settings.setTimePerQuestion(promptDouble(
+                        "Set Time per Question",
+                        "In each question, a series of numbers pop up. How long should it stay there?",
+                        settings.getTimePerQuestion()
+                ));
+            }
+        });
+        submenu.add(item);
+
+        item = new JMenuItem("Time to Answer");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                settings.setTimeToAnswer(promptInteger(
+                        "Set Time to Answer",
+                        "At the end of each set of numbers, how long should the child have to fill in their answer",
+                        settings.getTimeToAnswer()
+                ));
+            }
+        });
+        submenu.add(item);
+
+        item = new JMenuItem("Operation");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] options = Operation.values();
+                Operation operation = (Operation)JOptionPane.showInputDialog(
+                        AbacusPracticeWindow.this,
+                        "What operation is the quiz using",
+                        "Choose Operation",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        options,
+                        options[settings.getOperation().ordinal()]);
+                settings.setOperation(operation);
+            }
+        });
+        submenu.add(item);
+
+        menuBar.add(submenu);
+
+        submenu = new JMenu("Display Settings");
+
+        item = new JMenuItem("Font Size");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                settings.setFontSize(promptInteger(
+                        "Set Font Size",
+                        "How big should the numbers be?",
+                        settings.getFontSize()
+                ));
+                mainLabel.setFont(new Font("Serif", Font.PLAIN, settings.getFontSize()));
+                mainLabel.setSize(950, settings.getFontSize() + 20);
+
+            }
+        });
+        submenu.add(item);
+
     }
     public SettingsModifierButton generateFromLine(String line)
     {
