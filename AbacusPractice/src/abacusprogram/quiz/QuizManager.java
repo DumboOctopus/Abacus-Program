@@ -1,5 +1,8 @@
 package abacusprogram.quiz;
 
+import abacusprogram.quiz.question.generator.PositiveContinuallyGenerator;
+import abacusprogram.quiz.question.generator.QuestionGenerator;
+import abacusprogram.quiz.question.generator.RequiredQuestionsGenerator;
 import abacusprogram.windows.TimedIntegerDialogListener;
 import abacusprogram.quiz.question.Question;
 import abacusprogram.quiz.question.RequiredQuestion;
@@ -40,7 +43,11 @@ public class QuizManager {
 
     //generate questions
     private RequiredQuestion[] requiredQuestions;
-    private int numberInQuestionSet;
+
+
+    //RunningQuizData idea
+    private RunningQuizData data;
+    private QuestionGenerator questionGenerator;
 
     //=============CONSTRUCTOR
     public QuizManager (AbacusPracticeWindow window) {
@@ -51,7 +58,11 @@ public class QuizManager {
 
         questionsAsked = new Question[settings.getNumberOfQuestions()];
         requiredQuestions = RequiredQuestion.copyArray(settings.getRequiredNumbers());
-        numberInQuestionSet = 0;
+
+
+        data = new RunningQuizData(window.getSettings());
+        questionGenerator = new RequiredQuestionsGenerator(window.getSettings());
+
 
         createQuestionAndRun();
     }
@@ -60,41 +71,19 @@ public class QuizManager {
 
     public int nextQuestion()
     {
-        int newNum =(int) (settings.getLowerRange() + (settings.getUpperRange() - settings.getLowerRange() + 1) * Math.random());
+        int newNum;
 
-
-        double prob = ((double)numberInQuestionSet + requiredQuestions.length)/settings.getNumberOfNumbersPerQuestions();
-        System.out.println("prob: "+prob);
-        System.out.println("numberInQuestionSet: "+numberInQuestionSet);
-        for(RequiredQuestion requiredQuestion: requiredQuestions)
-        {
-            System.out.println("\thi: "+requiredQuestion.hasBeenAsked());
-            if(!requiredQuestion.hasBeenAsked())
-                if(Math.random() <= prob) {
-                    newNum = requiredQuestion.getValue();
-                    System.out.println("set: "+newNum);
-                }
-            //do not set hasBeenAsked = true yet because it might be filtered
+        if(data.getCurrQuestionInSetNumber() == 1) {
+            newNum = questionGenerator.getNextValue();
+        }else {
+            newNum = questionGenerator.getNextValue(
+                    Integer.parseInt(mainLabel.getText())
+            );
         }
-
-        while((newNum+"").equals(mainLabel.getText()) || newNum == 0) {
-            newNum = (int) (settings.getLowerRange() + (settings.getUpperRange() - settings.getLowerRange() + 1) * Math.random());
-        }
-        System.out.println("num:"+newNum);
-
-        for(RequiredQuestion requiredQuestion: requiredQuestions)
-        {
-            if(newNum == requiredQuestion.getValue()) {
-                requiredQuestion.asked();
-                System.out.println(requiredQuestion.getValue() + " asked");
-            }
-        }
-
-
         mainLabel.setText("" + newNum);
         mainLabel.setFont(new Font("Serif", Font.PLAIN, settings.getFontSize()));
 
-        numberInQuestionSet++;
+        data.incrementCurrQuestion();
         return newNum;
     }
     public void createQuestionAndRun()
@@ -155,8 +144,7 @@ public class QuizManager {
             mainLabel.setText("");
             questionTimer.stop();
             questionsAsked[questionNum - 1] = new Question( compiledQuestion);
-            numberInQuestionSet = 0;
-            requiredQuestions = RequiredQuestion.copyArray(settings.getRequiredNumbers());
+            //requiredQuestions = RequiredQuestion.copyArray(settings.getRequiredNumbers());
             dialog = new TimedIntegerDialog(
                     window,
                     "Please Answer",
@@ -196,6 +184,8 @@ public class QuizManager {
 
             //mainLabel.setFont(new Font("Serif", Font.PLAIN, 100));
             mainLabel.setText("Get Ready");
+            data.goToNextQuestionSet(questionsAsked[questionNum-1]);
+
             fTimer = new Timer(
                 2000,
                 new ActionListener() {

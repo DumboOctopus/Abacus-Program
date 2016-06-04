@@ -3,7 +3,7 @@ package abacusprogram.quiz.question;
 /**
  * Created on 3/29/16.
  */
-public class RequiredQuestion {
+public class RequiredQuestion{
     private int value;
     private boolean bAsked;
 
@@ -29,6 +29,10 @@ public class RequiredQuestion {
 
 
     //========================OVERIDE FROM OBJECT====================//
+    //i know this is wrong way of implementing clone but its so much simpler in my case
+    /*
+        @return: returns a unused copy of this requiredQuestion (hasBeenAsked() == false)
+     */
     public RequiredQuestion clone()
     {
         RequiredQuestion out = new RequiredQuestion(value);

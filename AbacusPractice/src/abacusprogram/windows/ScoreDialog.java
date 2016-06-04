@@ -22,7 +22,9 @@ public class ScoreDialog extends JDialog {
 
 
         setUpBackgroundImage();
-        setLayout(null);
+        SpringLayout layout = new SpringLayout();
+        Container contentpane = getContentPane();
+        getContentPane().setLayout(layout);
         JPanel pane = new JPanel();
         pane.setLayout(new GridLayout(0, 3));
 
@@ -47,6 +49,39 @@ public class ScoreDialog extends JDialog {
         pane.setOpaque(false);
 
         add(pane);
+        //spring layout stufff
+        layout.putConstraint(
+                SpringLayout.NORTH,
+                pane,
+                10,
+                SpringLayout.NORTH,
+                contentpane
+        );
+        layout.putConstraint(
+                SpringLayout.EAST,
+                pane,
+                10,
+                SpringLayout.EAST,
+                contentpane
+        );
+        layout.putConstraint(
+                SpringLayout.SOUTH,
+                pane,
+                10,
+                SpringLayout.SOUTH,
+                contentpane
+        );
+        layout.putConstraint(
+                SpringLayout.WEST,
+                pane,
+                10,
+                SpringLayout.WEST,
+                contentpane
+        );
+
+
+
+        //end of spring layout stufffs
         setSize(
                 background.getWidth(null)/3,
                 100+ questions.length * 30
