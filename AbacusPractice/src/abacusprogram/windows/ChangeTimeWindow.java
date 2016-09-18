@@ -26,7 +26,9 @@ public class ChangeTimeWindow extends JFrame {
         setContentPane(new ContainerWithBackground(
                 ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("resources/timeBackground.jpg"))
         ));
-        setLayout(null);
+        Container contentpane = getContentPane();
+        SpringLayout layout = new SpringLayout();
+        contentpane.setLayout(layout);
 
         JPanel pane = new JPanel();
         pane.setLayout(new GridLayout(1, times.length));
@@ -44,7 +46,24 @@ public class ChangeTimeWindow extends JFrame {
         );
         pane.setOpaque(false);
         add(pane);
-        setSize(70 + 50 * times.length, 150 + 35);
+        //spring layout stufff
+        layout.putConstraint(
+                SpringLayout.NORTH,
+                pane,
+                30,
+                SpringLayout.NORTH,
+                contentpane
+        );
+        layout.putConstraint(
+                SpringLayout.WEST,
+                pane,
+                10,
+                SpringLayout.WEST,
+                contentpane
+        );
+
+
+        setSize(200 + 50 * times.length, 150);
 
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

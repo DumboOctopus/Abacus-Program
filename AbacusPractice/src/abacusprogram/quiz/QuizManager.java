@@ -10,10 +10,13 @@ import abacusprogram.windows.AbacusPracticeWindow;
 import abacusprogram.windows.ScoreDialog;
 import abacusprogram.windows.TimedIntegerDialog;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * dude that Integer.parseInt(mainLabel.getText()) tho...
@@ -49,8 +52,12 @@ public class QuizManager {
     private RunningQuizData data;
     private QuestionGenerator questionGenerator;
 
-    //=============CONSTRUCTOR
+    private static URL nextQuestionSoundURL;
+
+
+    //============================CONSTRUCTOR==============================//
     public QuizManager (AbacusPracticeWindow window) {
+        nextQuestionSoundURL = window.nextQuestionSound;
         settings = window.getSettings();
         mainLabel = window.getMainLabel();
         questionNumberLabel = window.getQuestionNumberLabel();
@@ -65,6 +72,7 @@ public class QuizManager {
 
 
         createQuestionAndRun();
+
     }
 
     //===================METHODS============///
@@ -72,6 +80,8 @@ public class QuizManager {
     public int nextQuestion()
     {
         int newNum;
+
+
 
         if(data.getCurrQuestionInSetNumber() == 1) {
             newNum = questionGenerator.getNextValue();
@@ -88,6 +98,16 @@ public class QuizManager {
     }
     public void createQuestionAndRun()
     {
+        try {
+            AudioInputStream stream = AudioSystem.getAudioInputStream(nextQuestionSoundURL);
+            Clip clip = AudioSystem.getClip();
+            // Open audio clip and load samples from the audio input stream.
+            clip.open(stream);
+            clip.start();
+            //clip.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         questionNumberLabel.setText("Question #" + questionNum);
         nextQuestion();
 

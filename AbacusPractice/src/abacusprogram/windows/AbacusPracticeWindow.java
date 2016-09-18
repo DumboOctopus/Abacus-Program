@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.net.URL;
 
 
 /**
@@ -48,6 +49,11 @@ public class AbacusPracticeWindow extends JFrame implements QuizListener {
     private boolean quizStarted = false;
     private boolean hasSessionPass = false;
 
+    //sound
+    public static final URL nextQuestionSound;
+
+
+    //===============================CONSTRUCTOR===========================================//
     public AbacusPracticeWindow() throws Exception {
         super("Abacus PRACTICE ");
         settings = new Settings(10, new Range(1, 20), 7, 5, 1, 100, Operation.ADDITION, new RequiredQuestion[0]);
@@ -55,7 +61,7 @@ public class AbacusPracticeWindow extends JFrame implements QuizListener {
         setContentPane(new ContainerWithBackground(i));
 
         setLayout(null);
-        setUpMainMenu2();
+        setUpMainMenu();
         setUpMainButton();
         setUpLabels();
 
@@ -66,7 +72,17 @@ public class AbacusPracticeWindow extends JFrame implements QuizListener {
     }
 
 
-    public void setUpMainMenu2() {
+    //=======================================STATIC INITS========================//
+
+    static {
+        System.out.println("I was in a static :D");
+        nextQuestionSound =Thread.currentThread().getContextClassLoader().getResource("resources/nextQuestionSound.wav");
+    }
+
+
+
+    //===================================CONSTRUCTOR HELPER METHODS=======================//
+    public void setUpMainMenu() {
         menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
 
@@ -365,8 +381,10 @@ public class AbacusPracticeWindow extends JFrame implements QuizListener {
 
         questionNumberLabel = new JLabel("", SwingConstants.CENTER);
         questionNumberLabel.setBounds(500, 20, 100, 40);
+        questionNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(questionNumberLabel);
     }
+
 
     //==============PROMPTING==================//
     public int promptInteger(String title, String message, int previousValue) {
@@ -593,6 +611,13 @@ public class AbacusPracticeWindow extends JFrame implements QuizListener {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    //=============================
+    //todo use this method
+    public void setQuestionNumberLabelText(String text)
+    {
+        questionNumberLabel.setText(text);
     }
 
 
